@@ -64,10 +64,13 @@ public class Cita {
 	public void setVeterinario(Veterinario veterinario) {
 		this.veterinario = veterinario;
 	}
-	//Metodo para mostrar las citas de un veterinario
+
+	// Metodo para mostrar las citas de un veterinario
 	public String mostrarCitasConVeterinario() {
-		return "El veterinario "+veterinario.getNombre() +" con dni "+veterinario.getDni()+ " tiene la cita "+id+ " el dia "+fecha+ " con la mascota "+mascota.getNombre();
+		return "El veterinario " + veterinario.getNombre() + " con dni " + veterinario.getDni() + " tiene la cita " + id
+				+ " el dia " + fecha + " con la mascota " + mascota.getNombre();
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -116,6 +119,7 @@ public class Cita {
 
 	@Override
 	public String toString() {
-		return "Cita [id=" + id + ", fecha=" + fecha + ", motivo=" + motivo + ", mascot=" + mascota + ", v=" + veterinario + "]";
+		return "Cita [id=" + id + ", fecha=" + fecha + ", motivo=" + motivo + ", con la mascota=" + mascota.getNombre() + ", v="
+				+ veterinario + "]";
 	}
 }

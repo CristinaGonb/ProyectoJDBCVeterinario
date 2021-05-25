@@ -55,6 +55,10 @@ public class Mascota {
 	public void setDueno(Dueno dueno) {
 		this.dueno = dueno;
 	}
+	
+	public String mascotaPorCiudad() {
+		return "Mascotas registradas en la ciudad "+dueno.getCiudad()+ " :Mascota "+nombre;
+	}
 
 	@Override
 	public int hashCode() {
@@ -107,5 +111,6 @@ public class Mascota {
 		return "Mascota [chip=" + chip + ", nombre=" + nombre + ", raza=" + raza + ", sexo=" + sexo + ", dueno=" + dueno
 				+ "]";
 	}
+	
 
 }

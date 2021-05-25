@@ -378,8 +378,6 @@ public class principal {
 			System.out.println("No existe ningun registro con ese dni");
 		}
 	}
-
-	// ----------------------------------------------
 	// ---------------------METODOS MENU DUEÑO---------------
 	/*
 	 * Metodo que se utiliza para insertar un nuevo dueño
@@ -457,7 +455,6 @@ public class principal {
 			System.out.println("No existe ningún registro con ese nombre");
 		}
 	}
-	// ----------------------------------------------------------
 	// -------------------METODOS MENU MASCOTA----------------
 
 	/*
@@ -547,8 +544,9 @@ public class principal {
 		}
 
 		if (m != null) {
-			System.out.println(m);
-			System.out.println("");
+			for (Mascota mascota : m) {
+				System.out.println(mascota.mascotaPorCiudad());
+			}
 		} else {
 			System.out.println("No existe ninguna mascota registrada en esa localidad");
 		}
@@ -714,7 +712,6 @@ public class principal {
 				}
 
 			}
-
 		}
 	}
 }
