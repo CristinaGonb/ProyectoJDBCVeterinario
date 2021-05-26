@@ -1,12 +1,11 @@
 package vista;
 
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 import dao.Cita;
 import dao.DaoCita;
 import dao.DaoDueno;
@@ -45,7 +44,7 @@ public class principal {
 		int opcionMenu;
 
 		do {
-			System.out.println("============SISTEMA GESTIÓN VETERINARIO============");
+			System.out.println("============SISTEMA GESTION VETERINARIO============");
 			System.out.println("Bienvenidos al sistema. Introduzca un numero: ");
 			System.out.println("0. Salir");
 			System.out.println("1. Veterinario");
@@ -69,11 +68,13 @@ public class principal {
 		int opcionVeterinario;
 
 		do {
-			System.out.println("====== Menú Veterinario. Seleccione una opción: =======");
+			System.out.println("====== Menú Veterinario=======");
 			System.out.println("1. Listar todos los veterinarios");
 			System.out.println("2. Consultar veterinario por dni");
 			System.out.println("3. Insertar un nuevo veterinario");
 			System.out.println("4. Volver al menú principal");
+			System.out.println("=============================");
+			System.out.println("Seleccione una opción: ");
 
 			// Introduzco opción del menú
 			opcionVeterinario = Integer.parseInt(teclado.nextLine());
@@ -90,16 +91,19 @@ public class principal {
 		int opcionDueno;
 
 		do {
-			System.out.println("====== Menú Dueño mascota. Seleccione una opción: =======");
+			System.out.println("====== Menú Dueño mascota=======");
 			System.out.println("1. Listar todos los dueños");
 			System.out.println("2. Consultar dueño por nombre");
 			System.out.println("3. Insertar un nuevo dueño");
-			System.out.println("4. Volver al menú principal");
+			System.out.println("4. Eliminar dueño");
+			System.out.println("5. Volver al menú principal");
+			System.out.println("================================");
+			System.out.println("Seleccione una opción: ");
 
 			// Introduzco opción del menú
 			opcionDueno = Integer.parseInt(teclado.nextLine());
 
-		} while (opcionDueno < 1 || opcionDueno > 4);
+		} while (opcionDueno < 1 || opcionDueno > 5);
 
 		return opcionDueno;
 	}
@@ -111,16 +115,19 @@ public class principal {
 		int opcionMascota;
 
 		do {
-			System.out.println("====== Menú Mascota. Seleccione una opción: =======");
+			System.out.println("====== Menú Mascota======");
 			System.out.println("1. Listar todas las mascotas");
 			System.out.println("2. Consultar mascotas por ciudad");// dueño
 			System.out.println("3. Insertar nueva mascota");
-			System.out.println("4. Volver al menú principal");
+			System.out.println("4. Eliminar Mascota por chip");
+			System.out.println("5. Volver al menú principal");
+			System.out.println("=========================");
+			System.out.println("Seleccione una opción:");
 
 			// Introduzco opción del menú
 			opcionMascota = Integer.parseInt(teclado.nextLine());
 
-		} while (opcionMascota < 1 || opcionMascota > 4);
+		} while (opcionMascota < 1 || opcionMascota > 5);
 
 		return opcionMascota;
 	}
@@ -132,12 +139,14 @@ public class principal {
 		int opcionCita;
 
 		do {
-			System.out.println("====== Menú Cita. Seleccione una opción: =======");
+			System.out.println("====== Menú Cita======");
 			System.out.println("1. Listar todas las citas");
 			System.out.println("2. Consultar todas las citas de un veterinario");
 			System.out.println("3. Insertar nueva cita ");
-			System.out.println("4. Modificar cita");
+			System.out.println("4. Modificar motivo de la cita");
 			System.out.println("5. Volver al menú principal");
+			System.out.println("=============================");
+			System.out.println("Seleccione una opción: ");
 
 			// Introduzco opción del menú
 			opcionCita = Integer.parseInt(teclado.nextLine());
@@ -146,7 +155,6 @@ public class principal {
 
 		return opcionCita;
 	}
-	// ------------------------------------------------------
 	// -------------OPCIONES MENU----------------------------
 
 	public static void opcionesMenuPrincipal(int opcionElegida) {
@@ -174,13 +182,13 @@ public class principal {
 			do {
 				opcion = menuDueno();
 				tratarMenuDueno(opcion);
-			} while (opcion != 4);
+			} while (opcion != 5);
 			break;
 		case 3:
 			do {
 				opcion = menuMascota();
 				tratarMenuMascota(opcion);
-			} while (opcion != 4);
+			} while (opcion != 5);
 			break;
 		case 4:
 			do {
@@ -234,6 +242,9 @@ public class principal {
 				anadirDueno();
 				break;
 			case 4:
+				eliminarDueno();
+				break;
+			case 5:
 				// Volver al menu principal
 				opcion = menuPrincipal();
 				opcionesMenuPrincipal(opcion);
@@ -260,6 +271,9 @@ public class principal {
 				anadirMascota();
 				break;
 			case 4:
+				eliminarMascota();
+				break;
+			case 5:
 				// Volver al menu principal
 				opcion = menuPrincipal();
 				opcionesMenuPrincipal(opcion);
@@ -332,22 +346,30 @@ public class principal {
 		Veterinario.especialidad especialidadVete;
 
 		System.out.println("*Añadir nuevo Veterinario*");
-
 		System.out.println("Introduzca el dni del veterinario: ");
 		dni = teclado.nextLine();
-		System.out.println("Introduzca el nombre del veterinario: ");
-		nombre = teclado.nextLine();
-		System.out.println("Introduzca los apellidos del veterinario: ");
-		apellidos = teclado.nextLine();
-		System.out.println("Introduzca la especialidad del veterinario: ");
-		System.out.println("\t0-DERMATOLOGIA \n\t1-PELUQUERIA \n\t2-CIRUJIA \n\t3-GENERAL");
-		especialidadVete = especialidad.values()[Integer.parseInt(teclado.nextLine())];
 
-		try {
-			daoVete.insertarVeterinario(new Veterinario(dni, nombre, apellidos, especialidadVete));
-			System.out.println("Nuevo veterinario creado correctamente");
-		} catch (SQLException e) {
-			System.out.println("Error " + e.getMessage());
+		Veterinario dniCorrecto = daoVete.buscarPorDni(dni);
+		// Compruebo si el dni insertado existe ya
+		if (dniCorrecto != null) {
+			System.out.println("Error, ya existe un veterinario con ese dni");
+		} else {
+			System.out.println("Introduzca el nombre del veterinario: ");
+			nombre = teclado.nextLine();
+
+			System.out.println("Introduzca los apellidos del veterinario: ");
+			apellidos = teclado.nextLine();
+
+			System.out.println("Introduzca la especialidad del veterinario: ");
+			System.out.println("\t0-DERMATOLOGIA \n\t1-PELUQUERIA \n\t2-CIRUJIA \n\t3-GENERAL");
+			especialidadVete = especialidad.values()[Integer.parseInt(teclado.nextLine())];
+
+			try {
+				daoVete.insertarVeterinario(new Veterinario(dni, nombre, apellidos, especialidadVete));
+				System.out.println("Nuevo veterinario creado correctamente");
+			} catch (SQLException e) {
+				System.out.println("Error " + e.getMessage());
+			}
 		}
 	}
 
@@ -378,6 +400,7 @@ public class principal {
 			System.out.println("No existe ningun registro con ese dni");
 		}
 	}
+
 	// ---------------------METODOS MENU DUEÑO---------------
 	/*
 	 * Metodo que se utiliza para insertar un nuevo dueño
@@ -385,25 +408,34 @@ public class principal {
 	public static void anadirDueno() throws SQLException {
 		DaoDueno daoDueno = DaoDueno.getInstance();
 		String nombre, apellidos, dni, telefono, ciudad;
+		Dueno dniEncontrado;
 
 		System.out.println("*Añadir nuevo Dueño*");
 
 		System.out.println("Introduzca el dni del dueño de la mascota: ");
 		dni = teclado.nextLine();
-		System.out.println("Introduzca el nombre del dueño: ");
-		nombre = teclado.nextLine();
-		System.out.println("Introduzca los apellidos del dueño: ");
-		apellidos = teclado.nextLine();
-		System.out.println("Introduzca el telefono: ");
-		telefono = teclado.nextLine();
-		System.out.println("Introduce la ciudad: ");
-		ciudad = teclado.nextLine();
 
-		try {
-			daoDueno.insertarDueno(new Dueno(dni, nombre, apellidos, telefono, ciudad));
-			System.out.println("Nuevo dueño creado correctamente");
-		} catch (SQLException e) {
-			System.out.println("Error " + e.getMessage());
+		dniEncontrado = daoDueno.listarDuenoPorDni(dni);
+
+		// Compruebo si el dni del dueño ya existe
+		if (dniEncontrado != null) {
+			System.out.println("Error, este dni ya existe");
+		} else {
+			System.out.println("Introduzca el nombre del dueño: ");
+			nombre = teclado.nextLine();
+			System.out.println("Introduzca los apellidos del dueño: ");
+			apellidos = teclado.nextLine();
+			System.out.println("Introduzca el telefono: ");
+			telefono = teclado.nextLine();
+			System.out.println("Introduce la ciudad: ");
+			ciudad = teclado.nextLine();
+
+			try {
+				daoDueno.insertarDueno(new Dueno(dni, nombre, apellidos, telefono, ciudad));
+				System.out.println("Nuevo dueño creado correctamente");
+			} catch (SQLException e) {
+				System.out.println("Error " + e.getMessage());
+			}
 		}
 	}
 
@@ -437,8 +469,8 @@ public class principal {
 		DaoDueno daoDueno = DaoDueno.getInstance();
 		String nombre;
 
-		System.out.println("Busqueda de un dueño ");
-		System.out.println("Introduzca el nombre que deseas buscar: ");
+		System.out.println("Búsqueda de un dueño ");
+		System.out.println("Introduce el nombre que deseas buscar: ");
 		nombre = teclado.nextLine();
 
 		Dueno dueno = null;
@@ -453,6 +485,25 @@ public class principal {
 			System.out.printf(dueno.toString());
 		} else {
 			System.out.println("No existe ningún registro con ese nombre");
+		}
+	}
+
+	public static void eliminarDueno() throws SQLException {
+		DaoDueno daoDueno = DaoDueno.getInstance();
+		System.out.println("Borrado del dueño");
+		System.out.println("Introduce su dni: ");
+		String dni = teclado.nextLine();
+
+		System.out.println("¿Está usted seguro de que desea eliminar este registro? (S/N)");
+		String respuesta = teclado.nextLine();
+
+		if (respuesta.equalsIgnoreCase("S")) {
+			try {
+				daoDueno.eliminarDueno(dni);
+				System.out.println("Registro eliminado correctamente");
+			} catch (SQLException | DuenoException e) {
+				System.out.println("Error " + e.getMessage());
+			}
 		}
 	}
 	// -------------------METODOS MENU MASCOTA----------------
@@ -473,7 +524,7 @@ public class principal {
 
 		if (listaMascota != null) {
 			for (Mascota m : listaMascota) {
-				System.out.println(m);
+				System.out.println(m.toString());
 			}
 		} else {
 			System.out.println("No se encuentran mascotas registradas en la base de datos");
@@ -489,34 +540,42 @@ public class principal {
 		try {
 			String nombre, raza, sexo, dniDueno;
 			int chip;
+			Mascota chipABuscar;
 
 			System.out.println("*Añadir nueva Mascota*");
 			System.out.println("Introduzca el chip de la mascota: ");
 			chip = Integer.parseInt(teclado.nextLine());
-			System.out.println("Introduzca el nombre de la mascota: ");
-			nombre = teclado.nextLine();
-			System.out.println("Introduzca la raza: ");
-			raza = teclado.nextLine();
-			System.out.println("Introduzca el sexo(M/H): ");
-			sexo = teclado.nextLine();
 
-			// Datos dueño
-			System.out.println("Introduce el dni del dueño de la mascota: ");
-			dniDueno = teclado.nextLine();
+			chipABuscar = daoMascota.buscarPorChip(chip);
 
-			try {
-				DaoDueno daoDueno = DaoDueno.getInstance();
+			if (chipABuscar != null) {
+				System.out.println("Error, ya existe una mascota con ese chip");
+			} else {
+				System.out.println("Introduzca el nombre de la mascota: ");
+				nombre = teclado.nextLine();
+				System.out.println("Introduzca la raza: ");
+				raza = teclado.nextLine();
+				System.out.println("Introduzca el sexo(M/H): ");
+				sexo = teclado.nextLine();
 
-				Dueno duenoMascota = daoDueno.listarDuenoPorDni(dniDueno);
+				// Datos dueño
+				System.out.println("Introduce el dni del dueño de la mascota: ");
+				dniDueno = teclado.nextLine();
 
-				if (duenoMascota == null) {
-					System.out.println("No existe ningun dueño registrado con ese dni " + dniDueno);
-				} else {
-					daoMascota.insertarMascota(new Mascota(chip, nombre, raza, sexo, duenoMascota));
+				try {
+					DaoDueno daoDueno = DaoDueno.getInstance();
+
+					Dueno duenoMascota = daoDueno.listarDuenoPorDni(dniDueno);
+
+					if (duenoMascota == null) {
+						System.out.println("No existe ningun dueño registrado con ese dni " + dniDueno);
+					} else {
+						daoMascota.insertarMascota(new Mascota(chip, nombre, raza, sexo, duenoMascota));
+					}
+					System.out.println("Nuevo registro insertado correctamente");
+				} catch (SQLException e) {
+					System.out.println("Error " + e.getMessage());
 				}
-				System.out.println("Nuevo registro insertado correctamente");
-			} catch (SQLException e) {
-				System.out.println("Error " + e.getMessage());
 			}
 		} catch (Exception e) {
 			System.out.println("Los datos no son correctos, vuelve a intentarlo " + e.getMessage());
@@ -536,7 +595,8 @@ public class principal {
 		ciudad = teclado.nextLine();
 
 		List<Mascota> m = null;
-
+		List<String> nombreMascotas = new ArrayList<String>();// Para guardar el nombre de las mascotas encontradas en
+																// esa ciudad
 		try {
 			m = daoMascota.consultarMascotasPorCiudadDueno(ciudad);
 		} catch (SQLException e) {
@@ -545,10 +605,31 @@ public class principal {
 
 		if (m != null) {
 			for (Mascota mascota : m) {
-				System.out.println(mascota.mascotaPorCiudad());
+				nombreMascotas.add(mascota.getNombre());
 			}
+			System.out.println("Mascotas registradas en la ciudad de " + ciudad + ": " + nombreMascotas.toString());
 		} else {
 			System.out.println("No existe ninguna mascota registrada en esa localidad");
+		}
+	}
+
+	public static void eliminarMascota() throws SQLException {
+		DaoMascota daoMascota = DaoMascota.getInstance();
+
+		System.out.println("Borrado de la mascota");
+		System.out.println("Introduce su chip: ");
+		int chip = Integer.parseInt(teclado.nextLine());
+
+		System.out.println("¿Está usted seguro de que desea eliminar este registro? (S/N)");
+		String respuesta = teclado.nextLine();
+
+		if (respuesta.equalsIgnoreCase("S")) {
+			try {
+				daoMascota.eliminarMascota(chip);
+				System.out.println("Registro eliminado correctamente");
+			} catch (SQLException | MascotaException e) {
+				System.out.println("Error " + e.getMessage());
+			}
 		}
 	}
 
@@ -629,7 +710,7 @@ public class principal {
 	public static void consultarCitasPorVeterinario() throws SQLException {
 		DaoCita daoCita = DaoCita.getInstance();
 
-		System.out.println("Busqueda de la cita de un veterinario");
+		System.out.println("Búsqueda de la cita de un veterinario");
 		System.out.println("Introduce el dni del veterinario que deseas buscar: ");
 		String dniV = teclado.nextLine();
 
@@ -640,11 +721,15 @@ public class principal {
 
 			if (veterinarioABuscar == null) {
 				System.out.println("No existe ningun veterinario con ese dni");
+				System.out.println("");
 			} else {
-				for (Cita citaV : lista) {
-					System.out.println(citaV.mostrarCitasConVeterinario());
+				if (lista == null) {
+					System.out.println("El veterinario " + dniV + " no tiene citas asociadas en este momento.");
+				} else {
+					for (Cita citaV : lista) {
+						System.out.println(citaV.mostrarCitasConVeterinario());
+					}
 				}
-
 			}
 		} catch (SQLException e) {
 			System.out.println("Error " + e.getMessage());
@@ -656,21 +741,14 @@ public class principal {
 	 */
 	public static void actualizarCita() throws SQLException {
 		DaoCita daoCita = DaoCita.getInstance();
-		DaoMascota daoMascota = DaoMascota.getInstance();
-		DaoVeterinario daoVete = DaoVeterinario.getInstance();
-
-		String motivo, srtFecha, dniVeterinario;
-		LocalDate fecha;
-		int chipMascota;
+		String motivo;
 
 		// Solicito id de cita que deseo actualizar
 		System.out.println("Actualizacion de una cita");
-		System.out.println("Introduzca el ID de la cita");
+		System.out.println("Introduzca el ID de la cita que deseas modificar: ");
 		int id = Integer.parseInt(teclado.nextLine());
 
 		Cita citaABuscar = null;
-		Mascota mascotaABuscar = null;
-		Veterinario veterinarioABuscar = null;
 
 		// Busco la cita y la almaceno en cita
 		citaABuscar = daoCita.buscarCitaPorId(id);
@@ -680,38 +758,14 @@ public class principal {
 			System.out.println("La cita que desea modificar no esta registada en la base de datos");
 		} else {
 			// Si existe, introducimos los datos a modificar
-			System.out.println("Introduzca la fecha: ");
-			srtFecha = teclado.nextLine();
-			fecha = LocalDate.parse(srtFecha, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-			System.out.println("Introduzca el motivo de la cita: ");
+			System.out.println("Introduzca el nuevo motivo de la cita: ");
 			motivo = teclado.nextLine();
-			// Dato Mascota
-			System.out.println("Introduzca el chip de la mascota: ");
-			chipMascota = Integer.parseInt(teclado.nextLine());
-			mascotaABuscar = daoMascota.buscarPorChip(chipMascota);
-			if (mascotaABuscar == null) {
-				System.out.println("No existe ninguna mascota con ese chip");
-			} else {
-				// Dato veterinario
-				System.out.println("Introduzca el dni del veterinario que va a tratar a la mascota: ");
-				dniVeterinario = teclado.nextLine();
 
-				veterinarioABuscar = daoVete.buscarPorDni(dniVeterinario);
-				if (veterinarioABuscar == null) {
-					System.out.println("No existe ningun veterinario con ese dni");
-				} else {
-					// Actualizo los valores
-					citaABuscar.setFecha(fecha);
-					citaABuscar.setMotivo(motivo);
-					citaABuscar.setMascota(mascotaABuscar);
-					citaABuscar.setVeterinario(veterinarioABuscar);
-
-					// Actualizo la cita
-					daoCita.actualizarCita(citaABuscar);
-					System.out.println("Cita actualizada correctamente.");
-				}
-
-			}
+			// Actualizo los valores
+			citaABuscar.setMotivo(motivo);
+			// Actualizo la cita
+			daoCita.actualizarCita(citaABuscar);
+			System.out.println("Cita actualizada correctamente.");
 		}
 	}
 }

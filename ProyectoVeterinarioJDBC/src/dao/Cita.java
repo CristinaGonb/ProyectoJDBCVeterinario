@@ -34,6 +34,7 @@ public class Cita {
 	}
 
 	public LocalDate getFecha() {
+	
 		return fecha;
 	}
 

@@ -61,7 +61,7 @@ public class DaoMascota {
 		boolean hayDatos = false;
 
 		try (PreparedStatement ps = con
-				.prepareStatement("SELECT * FROM vet_mascota INNER JOIN vet_dueno ON dni_dueno=dni;")) {
+				.prepareStatement("SELECT * FROM vet_mascota vm INNER JOIN vet_dueno vd ON vm.dni_dueno=vd.dni;")) {
 			Dueno d;
 
 			// Ejecuto sentencia
@@ -70,10 +70,10 @@ public class DaoMascota {
 			while (rs.next()) {
 				hayDatos = true;
 
-				d = new Dueno(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
-						rs.getString("telefono"), rs.getString("ciudad"));
-				result.add(new Mascota(rs.getInt("chip"), rs.getString("nombre"), rs.getString("raza"),
-						rs.getString("sexo"), d));
+				d = new Dueno(rs.getString("vd.dni"), rs.getString("vd.nombre"), rs.getString("vd.apellidos"),
+						rs.getString("vd.telefono"), rs.getString("vd.ciudad"));
+				result.add(new Mascota(rs.getInt("vm.chip"), rs.getString("vm.nombre"), rs.getString("vm.raza"),
+						rs.getString("vm.sexo"), d));
 			}
 			rs.close();
 		}
@@ -118,7 +118,8 @@ public class DaoMascota {
 		Mascota resultadoMascota = null;
 		Dueno dueno;
 		// Creo consulta
-		PreparedStatement ps = con.prepareStatement("SELECT * FROM vet_mascota vm JOIN vet_dueno vd ON vm.dni_dueno=vd.dni WHERE chip= ?;");
+		PreparedStatement ps = con.prepareStatement(
+				"SELECT * FROM vet_mascota vm JOIN vet_dueno vd ON vm.dni_dueno=vd.dni WHERE chip= ?;");
 
 		// Recojo el valor que quiero buscar
 		ps.setInt(1, chip);
@@ -134,5 +135,18 @@ public class DaoMascota {
 		rs.close();
 
 		return resultadoMascota;
+	}
+
+	public void eliminarMascota(int chip) throws SQLException, MascotaException {
+		Mascota mascotaAEncontrar = buscarPorChip(chip);
+
+		if (mascotaAEncontrar == null) {
+			throw new MascotaException("No existe una mascota con ese chip " + chip);
+		}
+
+		try (PreparedStatement ps = con.prepareStatement("DELETE FROM vet_mascota WHERE chip= ?")) {
+			ps.setInt(1, chip);
+			ps.executeUpdate();
+		}
 	}
 }

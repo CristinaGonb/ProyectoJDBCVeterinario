@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import singlenton.DBConnection;
+
 public class DaoDueno {
 
 	/*
@@ -54,6 +55,7 @@ public class DaoDueno {
 			ps.executeUpdate();
 		}
 	}
+
 	/**
 	 * Metodo que se utilizada para mostrar todos los dueños que estan registrados
 	 * en la base de datos
@@ -84,7 +86,8 @@ public class DaoDueno {
 	}
 
 	/**
-	 * Metodo que se utiliza para buscar a un dueno por su nombre en la base de datos
+	 * Metodo que se utiliza para buscar a un dueno por su nombre en la base de
+	 * datos
 	 * 
 	 * @param nombre
 	 * @return result
@@ -113,6 +116,7 @@ public class DaoDueno {
 
 	/**
 	 * Metodo que se utiliza para buscar a un dueño de la mascota por su dni
+	 * 
 	 * @param dni del dueño
 	 * @return result resultado del dueño encontrado por ese dni
 	 * @throws SQLException
@@ -136,5 +140,24 @@ public class DaoDueno {
 			rs.close();
 		}
 		return result;
+	}
+	/**
+	 * Metodo que se utiliza para eliminar a un dueño por su dni
+	 * @param dni
+	 * @throws SQLException
+	 * @throws DuenoException
+	 */
+	public void eliminarDueno(String dni) throws SQLException, DuenoException {
+		// Se elimina por PK, por lo que busco primero su dni
+		Dueno buscarDniDueno = listarDuenoPorDni(dni);
+
+		if (buscarDniDueno == null) {
+			throw new DuenoException("No existe un dueno con ese dni " + dni);
+		}
+
+		try (PreparedStatement ps = con.prepareStatement("DELETE FROM vet_dueno WHERE dni= ?")) {
+			ps.setString(1, dni);
+			ps.executeUpdate();
+		}
 	}
 }

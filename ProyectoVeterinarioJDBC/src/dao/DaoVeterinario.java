@@ -50,6 +50,7 @@ public class DaoVeterinario {
 		ps.setString(1, vete.getDni());
 		ps.setString(2, vete.getNombre());
 		ps.setString(3, vete.getApellidos());
+		
 		// Recoge la especialidad que especifico en el principal al crear el veterinario
 		// ordinal para sacar la posicion
 		switch (vete.getEspecialidad()) {
@@ -75,7 +76,7 @@ public class DaoVeterinario {
 
 	/**
 	 * Metodo para listar todos los veterinarios que hay en la base de datos
-	 * 
+	 * @return result lista con el resultado de todos los veterinarios 
 	 * @throws SQLException
 	 */
 

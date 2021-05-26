@@ -3,14 +3,14 @@ package dao;
 public class Mascota {
 
 	private int chip;
-	private String nombre, raza;
+	private String nombreMascota, raza;
 	private String sexo;
 	private Dueno dueno;
 
 	public Mascota(int chip, String nombre, String raza, String sexo, Dueno dueno) {
 
 		this.chip = chip;
-		this.nombre = nombre;
+		this.nombreMascota = nombre;
 		this.raza = raza;
 		this.sexo = sexo;
 		this.dueno = dueno;
@@ -25,11 +25,11 @@ public class Mascota {
 	}
 
 	public String getNombre() {
-		return nombre;
+		return nombreMascota;
 	}
 
 	public void setNombre(String nombre) {
-		this.nombre = nombre;
+		this.nombreMascota = nombre;
 	}
 
 	public String getRaza() {
@@ -56,9 +56,9 @@ public class Mascota {
 		this.dueno = dueno;
 	}
 	
-	public String mascotaPorCiudad() {
-		return "Mascotas registradas en la ciudad "+dueno.getCiudad()+ " :Mascota "+nombre;
-	}
+//	public String mascotaPorCiudad() {
+//		return "Mascotas registradas en la ciudad "+dueno.getCiudad()+ " :Mascota "+nombreMascota;
+//	}
 
 	@Override
 	public int hashCode() {
@@ -66,7 +66,7 @@ public class Mascota {
 		int result = 1;
 		result = prime * result + chip;
 		result = prime * result + ((dueno == null) ? 0 : dueno.hashCode());
-		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		result = prime * result + ((nombreMascota == null) ? 0 : nombreMascota.hashCode());
 		result = prime * result + ((raza == null) ? 0 : raza.hashCode());
 		result = prime * result + ((sexo == null) ? 0 : sexo.hashCode());
 		return result;
@@ -88,10 +88,10 @@ public class Mascota {
 				return false;
 		} else if (!dueno.equals(other.dueno))
 			return false;
-		if (nombre == null) {
-			if (other.nombre != null)
+		if (nombreMascota == null) {
+			if (other.nombreMascota != null)
 				return false;
-		} else if (!nombre.equals(other.nombre))
+		} else if (!nombreMascota.equals(other.nombreMascota))
 			return false;
 		if (raza == null) {
 			if (other.raza != null)
@@ -108,7 +108,7 @@ public class Mascota {
 
 	@Override
 	public String toString() {
-		return "Mascota [chip=" + chip + ", nombre=" + nombre + ", raza=" + raza + ", sexo=" + sexo + ", dueno=" + dueno
+		return "Mascota [chip=" + chip + ", nombre=" + nombreMascota + ", raza=" + raza + ", sexo=" + sexo + ", dueno=" + dueno.getNombre()+ " " +dueno.getApellidos()
 				+ "]";
 	}
 	

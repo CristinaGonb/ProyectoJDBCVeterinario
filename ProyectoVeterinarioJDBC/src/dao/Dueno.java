@@ -106,7 +106,7 @@ public class Dueno {
 
 	@Override
 	public String toString() {
-		return "Dueno [dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono
+		return "Dueno [dni=" + dni + ", nombre=" + getNombre() + ", apellidos=" + apellidos + ", telefono=" + telefono
 				+ ", ciudad=" + ciudad + "]";
 	}
 

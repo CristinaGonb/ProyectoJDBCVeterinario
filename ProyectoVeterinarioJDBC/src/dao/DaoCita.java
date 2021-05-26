@@ -78,13 +78,13 @@ public class DaoCita {
 
 			while (rs.next()) {
 				hayDatos = true;
-				d = new Dueno(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
-						rs.getString("telefono"), rs.getString("ciudad"));
-				m = new Mascota(rs.getInt("chip"), rs.getString("nombre"), rs.getString("raza"), rs.getString("sexo"),
+				d = new Dueno(rs.getString("vd.dni"), rs.getString("vd.nombre"), rs.getString("vd.apellidos"),
+						rs.getString("vd.telefono"), rs.getString("vd.ciudad"));
+				m = new Mascota(rs.getInt("vm.chip"), rs.getString("vm.nombre"), rs.getString("vm.raza"), rs.getString("vm.sexo"),
 						d);
-				v = new Veterinario(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
-						especialidad.values()[rs.getInt("especialidad")]);
-				result.add(new Cita(rs.getInt("id"), rs.getDate("fecha").toLocalDate(), rs.getString("motivo"), m, v));
+				v = new Veterinario(rs.getString("vv.dni"), rs.getString("vv.nombre"), rs.getString("vv.apellidos"),
+						especialidad.values()[rs.getInt("vv.especialidad")]);
+				result.add(new Cita(rs.getInt("vc.id"), rs.getDate("vc.fecha").toLocalDate(), rs.getString("vc.motivo"), m, v));
 
 			}
 			rs.close();
@@ -191,14 +191,10 @@ public class DaoCita {
 			return;
 		}
 		// Actualizo la tabla citas
-		try (PreparedStatement ps = con
-				.prepareStatement("UPDATE vet_cita SET fecha = ?, motivo= ?, chip=?, dni_veterinario=? WHERE id=?;")) {
+		try (PreparedStatement ps = con.prepareStatement("UPDATE vet_cita SET motivo= ? WHERE id=?;")) {
 
-			ps.setDate(1, Date.valueOf(cita.getFecha()));
-			ps.setString(2, cita.getMotivo());
-			ps.setInt(3, cita.getMascota().getChip());
-			ps.setString(4, cita.getVeterinario().getDni());
-			ps.setInt(5, cita.getId());
+			ps.setString(1, cita.getMotivo());
+			ps.setInt(2, cita.getId());
 
 			ps.executeUpdate();
 		}
