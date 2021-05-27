@@ -71,15 +71,16 @@ public class principal {
 			System.out.println("====== Menú Veterinario=======");
 			System.out.println("1. Listar todos los veterinarios");
 			System.out.println("2. Consultar veterinario por dni");
-			System.out.println("3. Insertar un nuevo veterinario");
-			System.out.println("4. Volver al menú principal");
+			System.out.println("3. Consultar veterinarios por especialidad");
+			System.out.println("4. Insertar un nuevo veterinario");
+			System.out.println("5. Volver al menú principal");
 			System.out.println("=============================");
 			System.out.println("Seleccione una opción: ");
 
 			// Introduzco opción del menú
 			opcionVeterinario = Integer.parseInt(teclado.nextLine());
 
-		} while (opcionVeterinario < 1 || opcionVeterinario > 4);
+		} while (opcionVeterinario < 1 || opcionVeterinario > 5);
 
 		return opcionVeterinario;
 	}
@@ -142,9 +143,12 @@ public class principal {
 			System.out.println("====== Menú Cita======");
 			System.out.println("1. Listar todas las citas");
 			System.out.println("2. Consultar todas las citas de un veterinario");
-			System.out.println("3. Insertar nueva cita ");
-			System.out.println("4. Modificar motivo de la cita");
-			System.out.println("5. Volver al menú principal");
+			System.out.println("3. Consultar citas de una mascota");
+			System.out.println("4. Consultar citas de un dueño");//3 tablas
+			System.out.println("5. Consultar citas de un día");
+			System.out.println("6. Insertar nueva cita ");
+			System.out.println("7. Modificar fecha de la cita");
+			System.out.println("8. Volver al menú principal");
 			System.out.println("=============================");
 			System.out.println("Seleccione una opción: ");
 
