@@ -17,11 +17,27 @@ public class Cita {
 		this.mascota = mascota;
 		this.veterinario = veterinario;
 	}
+	
+	public Cita(int id, LocalDate fecha, String motivo, Mascota mascota) {
+		super();
+		this.id = id;
+		this.fecha = fecha;
+		this.motivo = motivo;
+		this.mascota = mascota;
+	}
 
 	public Cita(LocalDate fecha, String motivo, Mascota mascota, Veterinario veterinario) {
 		this.fecha = fecha;
 		this.motivo = motivo;
 		this.mascota = mascota;
+		this.veterinario = veterinario;
+	}
+	
+	public Cita(int id, LocalDate fecha, String motivo, Veterinario veterinario) {
+		super();
+		this.id = id;
+		this.fecha = fecha;
+		this.motivo = motivo;
 		this.veterinario = veterinario;
 	}
 
@@ -68,8 +84,19 @@ public class Cita {
 
 	// Metodo para mostrar las citas de un veterinario
 	public String mostrarCitasConVeterinario() {
-		return "El veterinario " + veterinario.getNombre() + " con dni " + veterinario.getDni() + " tiene la cita " + id
-				+ " el dia " + fecha + " con la mascota " + mascota.getNombre();
+		return "Citas del Veterinario " + veterinario.getNombre() + " con dni " + veterinario.getDni() + ". Cita con fecha " + fecha+ " "+motivo;
+	}
+	//Metodo para mostrar citas de una mascota
+	public String mostrarCitasConMascotas() {
+		return "Citas de la mascota " +mascota.getNombre()+ " con chip "+mascota.getChip()+ ". Cita con fecha " + fecha+ " motivo"+motivo;
+	}
+	//Metodo para mostrar citas de un dueño
+	public String mostrarCitasDueno() {
+		return "Citas de "+mascota.getDueno().getNombre()+ " con dni "+mascota.getDueno().getDni()+ ".Cita con la fecha"+fecha+ " para la mascota"+mascota.getNombre()+ " con chip "+mascota.getChip();
+	}
+	//Metodo para mostrar las citas de una determinada fecha
+	public String mostrarFechaCita() {
+		return "Listado de citas con la fecha: "+fecha+toString();
 	}
 
 	@Override

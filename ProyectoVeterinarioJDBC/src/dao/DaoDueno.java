@@ -60,11 +60,11 @@ public class DaoDueno {
 	 * Metodo que se utilizada para mostrar todos los dueños que estan registrados
 	 * en la base de datos
 	 * 
-	 * @return result
+	 * @return resultadoDuenos
 	 * @throws SQLException
 	 */
 	public List<Dueno> listarTodosLosDuenos() throws SQLException {
-		List<Dueno> result = new ArrayList<Dueno>();
+		List<Dueno> resultadoDuenos = new ArrayList<Dueno>();
 		boolean hayDatos = false;
 
 		try (PreparedStatement ps = con.prepareStatement("SELECT * FROM vet_dueno");) {
@@ -74,15 +74,15 @@ public class DaoDueno {
 			while (rs.next()) {
 				hayDatos = true;
 
-				result.add(new Dueno(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
+				resultadoDuenos.add(new Dueno(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
 						rs.getString("telefono"), rs.getString("ciudad")));
 			}
 			rs.close();
 		}
 		if (!hayDatos) {
-			result = null;
+			resultadoDuenos = null;
 		}
-		return result;
+		return resultadoDuenos;
 	}
 
 	/**
@@ -90,11 +90,11 @@ public class DaoDueno {
 	 * datos
 	 * 
 	 * @param nombre
-	 * @return result
+	 * @return resultadoDuenoNombre
 	 * @throws SQLException
 	 */
 	public Dueno listarDuenoPorNombre(String nombre) throws SQLException {
-		Dueno result = null;
+		Dueno resultadoDuenoNombre = null;
 
 		try (PreparedStatement ps = con.prepareStatement("SELECT * FROM vet_dueno WHERE nombre = ?")) {
 			// Recojo valor
@@ -106,23 +106,24 @@ public class DaoDueno {
 			// Recorro el resultado
 			if (rs.next()) {
 
-				result = (new Dueno(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
+				resultadoDuenoNombre = (new Dueno(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
 						rs.getString("telefono"), rs.getString("ciudad")));
 			}
 			rs.close();
 		}
-		return result;
+		return resultadoDuenoNombre;
 	}
 
+	
 	/**
 	 * Metodo que se utiliza para buscar a un dueño de la mascota por su dni
 	 * 
 	 * @param dni del dueño
-	 * @return result resultado del dueño encontrado por ese dni
+	 * @return resultadoDni resultado del dueño encontrado por ese dni
 	 * @throws SQLException
 	 */
 	public Dueno listarDuenoPorDni(String dni) throws SQLException {
-		Dueno result = null;
+		Dueno resultadoDni = null;
 
 		try (PreparedStatement ps = con.prepareStatement("SELECT * FROM vet_dueno WHERE dni = ?")) {
 			// Recojo valor
@@ -134,15 +135,17 @@ public class DaoDueno {
 			// Recorro el resultado
 			if (rs.next()) {
 
-				result = (new Dueno(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
+				resultadoDni = (new Dueno(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
 						rs.getString("telefono"), rs.getString("ciudad")));
 			}
 			rs.close();
 		}
-		return result;
+		return resultadoDni;
 	}
+
 	/**
 	 * Metodo que se utiliza para eliminar a un dueño por su dni
+	 * 
 	 * @param dni
 	 * @throws SQLException
 	 * @throws DuenoException

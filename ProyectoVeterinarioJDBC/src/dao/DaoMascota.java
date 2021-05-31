@@ -56,13 +56,19 @@ public class DaoMascota {
 		}
 	}
 
+	/**
+	 * Metodo que muestra todas las mascotas registradas en la base de datos
+	 * 
+	 * @return resultadoMascotas
+	 * @throws SQLException
+	 */
 	public List<Mascota> listarTodas() throws SQLException {
-		List<Mascota> result = new ArrayList<Mascota>();
+		List<Mascota> resultadoMascotas = new ArrayList<Mascota>();
 		boolean hayDatos = false;
 
 		try (PreparedStatement ps = con
 				.prepareStatement("SELECT * FROM vet_mascota vm INNER JOIN vet_dueno vd ON vm.dni_dueno=vd.dni;")) {
-			Dueno d;
+			Dueno dueno;
 
 			// Ejecuto sentencia
 			ResultSet rs = ps.executeQuery();
@@ -70,25 +76,33 @@ public class DaoMascota {
 			while (rs.next()) {
 				hayDatos = true;
 
-				d = new Dueno(rs.getString("vd.dni"), rs.getString("vd.nombre"), rs.getString("vd.apellidos"),
+				dueno = new Dueno(rs.getString("vd.dni"), rs.getString("vd.nombre"), rs.getString("vd.apellidos"),
 						rs.getString("vd.telefono"), rs.getString("vd.ciudad"));
-				result.add(new Mascota(rs.getInt("vm.chip"), rs.getString("vm.nombre"), rs.getString("vm.raza"),
-						rs.getString("vm.sexo"), d));
+				resultadoMascotas.add(new Mascota(rs.getInt("vm.chip"), rs.getString("vm.nombre"), rs.getString("vm.raza"),
+						rs.getString("vm.sexo"), dueno));
 			}
 			rs.close();
 		}
 		if (!hayDatos) {
-			result = null;
+			resultadoMascotas = null;
 		}
 
-		return result;
+		return resultadoMascotas;
 	}
 
+	/**
+	 * Metodo que muestra las mascotas que están registradas en una determinada
+	 * ciudad(dueño)
+	 * 
+	 * @param ciudad
+	 * @return resultadoMascotaCiudad
+	 * @throws SQLException
+	 */
 	public List<Mascota> consultarMascotasPorCiudadDueno(String ciudad) throws SQLException {
 
-		List<Mascota> result = new ArrayList<Mascota>();
+		List<Mascota> resultadoMascotaCiudad = new ArrayList<Mascota>();
 		boolean hayDatos = false;
-		Dueno d;
+		Dueno dueno;
 
 		try (PreparedStatement ps = con
 				.prepareStatement("SELECT * FROM vet_mascota LEFT JOIN vet_dueno on dni_dueno= dni WHERE ciudad=?;")) {
@@ -100,22 +114,62 @@ public class DaoMascota {
 
 			while (rs.next()) {
 				hayDatos = true;
-				d = new Dueno(rs.getString("ciudad"));
-				result.add(new Mascota(rs.getInt("chip"), rs.getString("nombre"), rs.getString("raza"),
-						rs.getString("sexo"), d));
+				dueno = new Dueno(rs.getString("ciudad"));
+				resultadoMascotaCiudad.add(new Mascota(rs.getInt("chip"), rs.getString("nombre"), rs.getString("raza"),
+						rs.getString("sexo"), dueno));
 			}
 			rs.close();
 
 			if (!hayDatos) {
-				result = null;
+				resultadoMascotaCiudad = null;
 			}
 		}
 
-		return result;
+		return resultadoMascotaCiudad;
 	}
 
+	/**
+	 * Metodo que muestra las mascotas de un dueño en concreto
+	 * 
+	 * @param dni del dueño
+	 * @return resultadoMascotasPorDueno
+	 * @throws SQLException
+	 */
+	public List<Mascota> consultarMascotas(String dni) throws SQLException {
+		List<Mascota> resultadoMascotasPorDueno = new ArrayList<Mascota>();
+		boolean hayDatos = false;
+		Dueno duenoMascota;
+
+		try (PreparedStatement ps = con.prepareStatement(
+				"SELECT * FROM vet_mascota vm INNER JOIN vet_dueno vd on vm.dni_dueno=vd.dni WHERE vm.dni_dueno=?")) {
+			ps.setString(1, dni);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				hayDatos = true;
+				duenoMascota = new Dueno(rs.getString("vd.dni"), rs.getString("vd.nombre"),
+						rs.getString("vd.apellidos"), rs.getString("vd.telefono"), rs.getString("vd.ciudad"));
+				resultadoMascotasPorDueno.add(new Mascota(rs.getInt("chip"), rs.getString("nombre"), rs.getString("raza"),
+						rs.getString("sexo"), duenoMascota));
+			}
+			rs.close();
+		}
+		if (!hayDatos) {
+			resultadoMascotasPorDueno = null;
+		}
+
+		return resultadoMascotasPorDueno;
+	}
+
+	/**
+	 * Metodo que muestra una mascota en concreto por el chip
+	 * 
+	 * @param chip
+	 * @return resultadoMascotaChip
+	 * @throws SQLException
+	 */
 	public Mascota buscarPorChip(int chip) throws SQLException {
-		Mascota resultadoMascota = null;
+		Mascota resultadoMascotaChip = null;
 		Dueno dueno;
 		// Creo consulta
 		PreparedStatement ps = con.prepareStatement(
@@ -129,14 +183,21 @@ public class DaoMascota {
 		if (rs.next()) {
 			dueno = new Dueno(rs.getString("dni"), rs.getString("nombre"), rs.getString("apellidos"),
 					rs.getString("telefono"), rs.getString("ciudad"));
-			resultadoMascota = new Mascota(rs.getInt("chip"), rs.getString("nombre"), rs.getString("raza"),
+			resultadoMascotaChip = new Mascota(rs.getInt("chip"), rs.getString("nombre"), rs.getString("raza"),
 					rs.getString("sexo"), dueno);
 		}
 		rs.close();
 
-		return resultadoMascota;
+		return resultadoMascotaChip;
 	}
 
+	/**
+	 * Metodo que elimina una mascota buscandola por el chip
+	 * 
+	 * @param chip
+	 * @throws SQLException
+	 * @throws MascotaException
+	 */
 	public void eliminarMascota(int chip) throws SQLException, MascotaException {
 		Mascota mascotaAEncontrar = buscarPorChip(chip);
 
