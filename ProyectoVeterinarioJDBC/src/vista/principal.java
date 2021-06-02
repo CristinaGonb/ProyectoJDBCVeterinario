@@ -23,6 +23,7 @@ public class principal {
 	/**
 	 * Aplicación para uso veterinario donde se gestiona la información de las
 	 * mascotas
+	 * 
 	 * @author Cristina González Baizán
 	 */
 	private static Scanner teclado = new Scanner(System.in);
@@ -331,8 +332,8 @@ public class principal {
 	}
 
 	/*
-	 * Metodo que se utiliza para insertar un nuevo veterinario
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para insertar un nuevo veterinario En caso de no tener
+	 * ninguno registrado, aparece mensaje de error.
 	 */
 	public static void anadirVeterinario() throws SQLException {
 		DaoVeterinario daoVete = DaoVeterinario.getInstance();
@@ -343,31 +344,35 @@ public class principal {
 		System.out.println("Introduzca el dni del veterinario: ");
 		dni = teclado.nextLine();
 
-		Veterinario dniCorrecto = daoVete.buscarPorDni(dni);
-		// Compruebo si el dni insertado existe ya
-		if (dniCorrecto != null) {
-			System.out.println("Error, ya existe un veterinario con ese dni");
-		} else {
-			
-			System.out.println("Introduzca el nombre del veterinario: ");
-			nombre = teclado.nextLine();
-			System.out.println("Introduzca los apellidos del veterinario: ");
-			apellidos = teclado.nextLine();
+		if (validarDni(dni)) {
+			Veterinario dniCorrecto = daoVete.buscarPorDni(dni);
+			// Compruebo si el dni insertado existe ya
+			if (dniCorrecto != null) {
+				System.out.println("Error, ya existe un veterinario con ese dni");
+			} else {
 
-			int numeroEspecialidad;
-			do {
-				System.out.println("Introduzca la especialidad del veterinario: ");
-				System.out.println("\t0-DERMATOLOGIA \n\t1-PELUQUERIA \n\t2-CIRUJIA \n\t3-GENERAL");
-				numeroEspecialidad = Integer.parseInt(teclado.nextLine());
-				especialidadVete = especialidad.values()[numeroEspecialidad];
-			} while (numeroEspecialidad < 0 || numeroEspecialidad > 3);
+				System.out.println("Introduzca el nombre del veterinario: ");
+				nombre = teclado.nextLine();
+				System.out.println("Introduzca los apellidos del veterinario: ");
+				apellidos = teclado.nextLine();
 
-			try {
-				daoVete.insertarVeterinario(new Veterinario(dni, nombre, apellidos, especialidadVete));
-				System.out.println("Nuevo veterinario creado correctamente");
-			} catch (SQLException e) {
-				System.out.println("Error " + e.getMessage());
+				int numeroEspecialidad;
+				do {
+					System.out.println("Introduzca la especialidad del veterinario: ");
+					System.out.println("\t0-DERMATOLOGIA \n\t1-PELUQUERIA \n\t2-CIRUJIA \n\t3-GENERAL");
+					numeroEspecialidad = Integer.parseInt(teclado.nextLine());
+					especialidadVete = especialidad.values()[numeroEspecialidad];
+				} while (numeroEspecialidad < 0 || numeroEspecialidad > 3);
+
+				try {
+					daoVete.insertarVeterinario(new Veterinario(dni, nombre, apellidos, especialidadVete));
+					System.out.println("Nuevo veterinario creado correctamente");
+				} catch (SQLException e) {
+					System.out.println("Error " + e.getMessage());
+				}
 			}
+		} else {
+			System.out.println("Error, dni no válido.Vuelve a introducir el dni con el siguiente formato(12345678A)");
 		}
 	}
 
@@ -383,24 +388,29 @@ public class principal {
 		System.out.println("Introduzca el dni del veterinario: ");
 		dni = teclado.nextLine();
 
-		Veterinario vete = null;
+		if (validarDni(dni)) {
+			Veterinario vete = null;
 
-		try {
-			vete = daoVete.buscarPorDni(dni);
-		} catch (SQLException e) {
-			System.out.println("Error " + e.getMessage());
-		}
+			try {
+				vete = daoVete.buscarPorDni(dni);
+			} catch (SQLException e) {
+				System.out.println("Error " + e.getMessage());
+			}
 
-		if (vete != null) {
-			System.out.printf(vete.toString());
-			System.out.println("");
+			if (vete != null) {
+				System.out.printf(vete.toString());
+				System.out.println("");
+			} else {
+				System.out.println("No existe ningun registro con ese dni");
+			}
 		} else {
-			System.out.println("No existe ningun registro con ese dni");
+			System.out.println("Error, dni no válido.Vuelve a introducir el dni con el siguiente formato(12345678A)");
 		}
 	}
+
 	/*
-	 * Metodo que muestra una lista de veterinarios de una especialidad concreta
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que muestra una lista de veterinarios de una especialidad concreta En
+	 * caso de no tener ninguno registrado, aparece mensaje de error.
 	 */
 	public static void listarVeterinarioPorEspecialidad() throws SQLException {
 		DaoVeterinario daoVeterinario = DaoVeterinario.getInstance();
@@ -410,14 +420,15 @@ public class principal {
 		System.out.println("Introduzca la especialidad del veterinario que deseas buscar: ");
 		System.out.println("\t0-DERMATOLOGIA \n\t1-PELUQUERIA \n\t2-CIRUJIA \n\t3-GENERAL");
 		numeroEspecialidad = Integer.parseInt(teclado.nextLine());
-		
-		//Si la especialidad introducida no existe, mensaje de error para volver a insertar las opciones que hay
+
+		// Si la especialidad introducida no existe, mensaje de error para volver a
+		// insertar las opciones que hay
 		if (numeroEspecialidad >= 0 && numeroEspecialidad <= 3) {
 			especialidadABuscar = especialidad.values()[numeroEspecialidad];
 
 			List<Veterinario> listaVeterinariosConEspecialidad = daoVeterinario
 					.buscarPorEspecialidad(especialidadABuscar);
-			
+
 			if (listaVeterinariosConEspecialidad == null) {
 				System.out
 						.println("Error, no existe ningun veterinario registrado con esa especialidad en este momento");
@@ -433,8 +444,8 @@ public class principal {
 
 	// ---------------------METODOS MENU DUEÑO---------------
 	/*
-	 * Metodo que se utiliza para insertar un nuevo dueño
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para insertar un nuevo dueño En caso de no tener
+	 * ninguno registrado, aparece mensaje de error.
 	 */
 	public static void anadirDueno() throws SQLException {
 		DaoDueno daoDueno = DaoDueno.getInstance();
@@ -446,33 +457,37 @@ public class principal {
 		System.out.println("Introduzca el dni del dueño de la mascota: ");
 		dni = teclado.nextLine();
 
-		dniEncontrado = daoDueno.listarDuenoPorDni(dni);
+		if (validarDni(dni)) {
+			dniEncontrado = daoDueno.listarDuenoPorDni(dni);
 
-		// Compruebo si el dni del dueño ya existe
-		if (dniEncontrado != null) {
-			System.out.println("Error, este dni ya existe");
-		} else {
-			System.out.println("Introduzca el nombre del dueño: ");
-			nombre = teclado.nextLine();
-			System.out.println("Introduzca los apellidos del dueño: ");
-			apellidos = teclado.nextLine();
-			System.out.println("Introduzca el telefono: ");
-			telefono = teclado.nextLine();
-			System.out.println("Introduce la ciudad: ");
-			ciudad = teclado.nextLine();
+			// Compruebo si el dni del dueño ya existe
+			if (dniEncontrado != null) {
+				System.out.println("Error, este dni ya existe");
+			} else {
+				System.out.println("Introduzca el nombre del dueño: ");
+				nombre = teclado.nextLine();
+				System.out.println("Introduzca los apellidos del dueño: ");
+				apellidos = teclado.nextLine();
+				System.out.println("Introduzca el telefono: ");
+				telefono = teclado.nextLine();
+				System.out.println("Introduce la ciudad: ");
+				ciudad = teclado.nextLine();
 
-			try {
-				daoDueno.insertarDueno(new Dueno(dni, nombre, apellidos, telefono, ciudad));
-				System.out.println("Nuevo dueño creado correctamente");
-			} catch (SQLException e) {
-				System.out.println("Error " + e.getMessage());
+				try {
+					daoDueno.insertarDueno(new Dueno(dni, nombre, apellidos, telefono, ciudad));
+					System.out.println("Nuevo dueño creado correctamente");
+				} catch (SQLException e) {
+					System.out.println("Error " + e.getMessage());
+				}
 			}
+		} else {
+			System.out.println("Error, dni no válido.Vuelve a introducir el dni con el siguiente formato(12345678A)");
 		}
 	}
 
 	/*
-	 * Metodo que se utiliza para mostrar todos los dueños registrados en la aplicación
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para mostrar todos los dueños registrados en la
+	 * aplicación En caso de no tener ninguno registrado, aparece mensaje de error.
 	 */
 	public static void listarTodosLosDuenos() throws SQLException {
 		DaoDueno daoDueno = DaoDueno.getInstance();
@@ -494,8 +509,8 @@ public class principal {
 	}
 
 	/*
-	 * Metodo que se utiliza para mostrar un dueño por su dni
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para mostrar un dueño por su dni En caso de no tener
+	 * ninguno registrado, aparece mensaje de error.
 	 */
 	public static void listarUnDuenoPorNombre() throws SQLException {
 		DaoDueno daoDueno = DaoDueno.getInstance();
@@ -519,9 +534,10 @@ public class principal {
 			System.out.println("No existe ningún registro con ese nombre");
 		}
 	}
+
 	/*
-	 * Metodo que se utiliza para eliminar un dueño introduciendo su dni
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para eliminar un dueño introduciendo su dni En caso de
+	 * no tener ninguno registrado, aparece mensaje de error.
 	 */
 	public static void eliminarDueno() throws SQLException {
 		DaoDueno daoDueno = DaoDueno.getInstance();
@@ -529,23 +545,27 @@ public class principal {
 		System.out.println("Introduce su dni: ");
 		String dni = teclado.nextLine();
 
-		System.out.println("¿Está usted seguro de que desea eliminar este registro? (S/N)");
-		String respuesta = teclado.nextLine();
+		if (validarDni(dni)) {
+			System.out.println("¿Está usted seguro de que desea eliminar este registro? (S/N)");
+			String respuesta = teclado.nextLine();
 
-		if (respuesta.equalsIgnoreCase("S")) {
-			try {
-				daoDueno.eliminarDueno(dni);
-				System.out.println("Registro eliminado correctamente");
-			} catch (SQLException | DuenoException e) {
-				System.out.println("Error " + e.getMessage());
+			if (respuesta.equalsIgnoreCase("S")) {
+				try {
+					daoDueno.eliminarDueno(dni);
+					System.out.println("Registro eliminado correctamente");
+				} catch (SQLException | DuenoException e) {
+					System.out.println("Error " + e.getMessage());
+				}
 			}
+		} else {
+			System.out.println("Error, dni no válido.Vuelve a introducir el dni con el siguiente formato(12345678A)");
 		}
 	}
 	// -------------------METODOS MENU MASCOTA----------------
 
 	/*
-	 * Metodo que se utiliza para mostrar todas las mascotas registradas en la aplicación
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para mostrar todas las mascotas registradas en la
+	 * aplicación En caso de no tener ninguno registrado, aparece mensaje de error.
 	 */
 	public static void listarTodasLasMascotas() throws SQLException {
 		DaoMascota daoMascota = DaoMascota.getInstance();
@@ -567,8 +587,8 @@ public class principal {
 	}
 
 	/*
-	 * Metodo que se utiliza para insertar una nueva mascota
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para insertar una nueva mascota En caso de no tener
+	 * ninguno registrado, aparece mensaje de error.
 	 */
 
 	public static void anadirMascota() throws SQLException {
@@ -620,8 +640,8 @@ public class principal {
 
 	/*
 	 * Metodo que se utiliza para consultar una mascota por la ciudad en la que esta
-	 * registrada su dueño
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * registrada su dueño En caso de no tener ninguno registrado, aparece mensaje
+	 * de error.
 	 */
 	public static void consultarMascotaPorCiudad() throws SQLException {
 		DaoMascota daoMascota = DaoMascota.getInstance();
@@ -649,9 +669,10 @@ public class principal {
 			System.out.println("No existe ninguna mascota registrada en esa localidad");
 		}
 	}
+
 	/*
-	 * Metodo que se utiliza para buscar las mascotas de un dueño en concreto
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para buscar las mascotas de un dueño en concreto En
+	 * caso de no tener ninguno registrado, aparece mensaje de error.
 	 */
 	public static void listarMascotasDeUnDueno() throws SQLException {
 		DaoMascota daoMascota = DaoMascota.getInstance();
@@ -660,17 +681,26 @@ public class principal {
 		System.out.println("Introduzca el dni del dueño: ");
 		String dni = teclado.nextLine();
 
-		Dueno buscarDniDueno = daoDueno.listarDuenoPorDni(dni);
-		List<Mascota> mascotasDueno = daoMascota.consultarMascotas(dni);
+		if (validarDni(dni)) {
+			Dueno buscarDniDueno = daoDueno.listarDuenoPorDni(dni);
+			List<Mascota> mascotasDueno = daoMascota.consultarMascotas(dni);
 
-		if (buscarDniDueno == null) {
-			System.out.println("No existe ningun registro con ese dni");
-		} else {
-			for (Mascota buscarMascotasDueno : mascotasDueno) {
-				System.out.println(buscarMascotasDueno.toString());
+			if (buscarDniDueno == null) {
+				System.out.println("No existe ningun registro con ese dni");
+			} else {
+				if (mascotasDueno != null) {
+					for (Mascota buscarMascotasDueno : mascotasDueno) {
+						System.out.println(buscarMascotasDueno.toString());
+					}
+				} else {
+					System.out.println("Dueño con dni " + buscarDniDueno.getDni() + " no tiene mascota asociada.");
+				}
 			}
+		} else {
+			System.out.println("Error, dni no válido.Vuelve a introducir el dni con el siguiente formato(12345678A)");
 		}
 	}
+
 	/*
 	 * Metodo que se utiliza para eliminar una mascota a través del chip
 	 */
@@ -696,8 +726,8 @@ public class principal {
 
 	// -------------------------METODOS MENU CITA--------------
 	/*
-	 * Metodo que se utiliza para listar todas las citas
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para listar todas las citas En caso de no tener ninguno
+	 * registrado, aparece mensaje de error.
 	 */
 	public static void listarTodasLasCitas() throws SQLException {
 		DaoCita daoCita = DaoCita.getInstance();
@@ -719,20 +749,24 @@ public class principal {
 	}
 
 	/*
-	 * Metodo que se utiliza para insertar una nueva cita
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para insertar una nueva cita En caso de no tener
+	 * ninguno registrado, aparece mensaje de error.
 	 */
 	public static void anadirCita() throws SQLException {
 		DaoCita daoCita = DaoCita.getInstance();
 		try {
 			String motivo, srtFecha, dniVeterinario;
-			LocalDate fecha;
+			LocalDate fecha = null;
 			int chipMascota;
 
-			System.out.println("*Añadir nueva Cita*");
-			System.out.println("Introduzca la fecha: ");
-			srtFecha = teclado.nextLine();
-			fecha = LocalDate.parse(srtFecha, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			try {
+				System.out.println("*Añadir nueva Cita*");
+				System.out.println("Introduzca la fecha: ");
+				srtFecha = teclado.nextLine();
+				fecha = LocalDate.parse(srtFecha, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+			} catch (DateTimeParseException e) {
+				System.out.println("La fecha introducida no es correcta, debe contener el formato(dd-MM-yyyy)");
+			}
 			System.out.println("Introduzca el motivo de la cita: ");
 			motivo = teclado.nextLine();
 			// Dato Mascota
@@ -742,33 +776,35 @@ public class principal {
 			System.out.println("Introduzca el dni del veterinario que va a tratar a la mascota: ");
 			dniVeterinario = teclado.nextLine();
 
-			try {
+			if (validarDni(dniVeterinario)) {
 				DaoVeterinario daoVete = DaoVeterinario.getInstance();
-				DaoMascota daoM = DaoMascota.getInstance();
+				DaoMascota daoMascota = DaoMascota.getInstance();
 
 				Veterinario vete = daoVete.buscarPorDni(dniVeterinario);
-				Mascota mascota = daoM.buscarPorChip(chipMascota);
+				Mascota mascota = daoMascota.buscarPorChip(chipMascota);
 
 				if (vete == null) {
 					System.out.println("No existe ningun veterinario registrado con ese dni " + dniVeterinario);
 				} else {
 					if (mascota == null) {
-						System.out.println("No existe ninguna mascota con ese chip " + chipMascota);
+						System.out.println("Cita no creada. No existe ninguna mascota con ese chip " + chipMascota);
 					} else {
 						daoCita.insertarCita(new Cita(fecha, motivo, mascota, vete));
+						System.out.println("Nuevo registro insertado correctamente");
 					}
 				}
-				System.out.println("Nuevo registro insertado correctamente");
-			} catch (SQLException e) {
-				System.out.println("Error " + e.getMessage());
+			} else {
+				System.out
+						.println("Error, dni no válido.Vuelve a introducir el dni con el siguiente formato(12345678A)");
 			}
 		} catch (Exception e) {
 			System.out.println("Los datos no son correctos, vuelve a intentarlo " + e.getMessage());
 		}
 	}
+
 	/*
-	 * Metodos que se utiliza para mostrar las citas que tiene una mascota
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodos que se utiliza para mostrar las citas que tiene una mascota En caso
+	 * de no tener ninguno registrado, aparece mensaje de error.
 	 */
 	public static void consultarCitasMascota() throws SQLException {
 		DaoCita daoCita = DaoCita.getInstance();
@@ -806,7 +842,7 @@ public class principal {
 		System.out.println("Introduce el dni del veterinario que deseas buscar: ");
 		String dniV = teclado.nextLine();
 
-		try {
+		if (validarDni(dniV)) {
 			DaoVeterinario daoVete = DaoVeterinario.getInstance();
 			Veterinario veterinarioABuscar = daoVete.buscarPorDni(dniV);
 			List<Cita> lista = daoCita.consultarCitasVeterinario(dniV);
@@ -824,10 +860,11 @@ public class principal {
 					}
 				}
 			}
-		} catch (SQLException e) {
-			System.out.println("Error " + e.getMessage());
+		} else {
+			System.out.println("Error, dni no válido.Vuelve a introducir el dni con el siguiente formato(12345678A)");
 		}
 	}
+
 	/*
 	 * Metodo que se utiliza para mostrar las citas del dueño de la mascota
 	 */
@@ -838,59 +875,56 @@ public class principal {
 		System.out.println("Introduce el dni el dueño que deseas buscar: ");
 		String dniDueno = teclado.nextLine();
 
-		Dueno buscarDniDueno = daoDueno.listarDuenoPorDni(dniDueno);
-		List<Cita> citasDueno = daoCita.consultarCitasDueno(dniDueno);
+		if (validarDni(dniDueno)) {
+			Dueno buscarDniDueno = daoDueno.listarDuenoPorDni(dniDueno);
+			List<Cita> citasDueno = daoCita.consultarCitasDueno(dniDueno);
 
-		if (buscarDniDueno == null) {
-			System.out.println("Error, no existe ningun registro con ese dni " + dniDueno);
-		} else {
-			if (citasDueno == null) {
-				System.out.println("El dueño con el dni " + dniDueno + " no tiene citas asociadas en este momento");
+			if (buscarDniDueno == null) {
+				System.out.println("Error, no existe ningun registro con ese dni " + dniDueno);
 			} else {
-				for (Cita cita : citasDueno) {
-					System.out.println(cita.mostrarCitasDueno());
+				if (citasDueno == null) {
+					System.out.println("El dueño con el dni " + dniDueno + " no tiene citas asociadas en este momento");
+				} else {
+					for (Cita cita : citasDueno) {
+						System.out.println(cita.mostrarCitasDueno());
+					}
 				}
 			}
+		} else {
+			System.out.println("Error, dni no válido.Vuelve a introducir el dni con el siguiente formato(12345678A)");
 		}
 	}
+
 	/*
-	 * Metodo que se utiliza para mostrar una cita por una fecha en concreto
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para mostrar una cita por una fecha en concreto En caso
+	 * de no tener ninguno registrado, aparece mensaje de error.
 	 */
 	public static void consultarCitaPorFecha() throws SQLException {
 		DaoCita daoCita = DaoCita.getInstance();
-		boolean fechaCorrecta = true;
-		// String fechaAConsultar = null;
 		LocalDate fecha = null;
 
-		do {
-			try {
-				System.out.println("Introduce la fecha de la cita que deseas consultar: ");
-				String fechaAConsultar = teclado.nextLine();
-				// Compruebo que inserto bien la fecha
-				fecha = LocalDate.parse(fechaAConsultar, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-				fechaCorrecta = true;
-			} catch (DateTimeParseException e) {
-				System.out.println(
-						"La fecha introducida no es correcta, vuelve a introducir la fecha con el siguiente formato(dd-MM-yyyy)");
-				fechaCorrecta = false;
-			}
-		} while (fechaCorrecta == false);
+		try {
+			System.out.println("Introduce la fecha de la cita que deseas consultar: ");
+			String fechaAConsultar = teclado.nextLine();
+			// Compruebo que inserto bien la fecha
+			fecha = LocalDate.parse(fechaAConsultar, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-		List<Cita> listaFecha = daoCita.consultarPorFecha(fecha);
-
-		if (listaFecha == null) {
-			System.out.println("Error, no existe un registro con esa fecha " + fecha);
-		} else {
-			for (Cita cita : listaFecha) {
-				System.out.println(cita.mostrarFechaCita());
+			List<Cita> listaFecha = daoCita.consultarPorFecha(fecha);
+			if (listaFecha == null) {
+				System.out.println("Error, no existe un registro con la fecha " + fechaAConsultar+ " actualmente");
+			} else {
+				for (Cita cita : listaFecha) {
+					System.out.println(cita.mostrarFechaCita());
+				}
 			}
+		} catch (DateTimeParseException e) {
+			System.out.println("La fecha introducida no es correcta, debe contener el formato(dd-MM-yyyy)");
 		}
 	}
 
 	/*
-	 * Metodo que se utiliza para actualizar una cita
-	 * En caso de no tener ninguno registrado, aparece mensaje de error.
+	 * Metodo que se utiliza para actualizar una cita En caso de no tener ninguno
+	 * registrado, aparece mensaje de error.
 	 */
 	public static void actualizarCita() throws SQLException {
 		DaoCita daoCita = DaoCita.getInstance();
@@ -910,16 +944,29 @@ public class principal {
 		if (citaABuscar == null) {
 			System.out.println("La cita que desea modificar no esta registada en la base de datos");
 		} else {
-			// Si existe, introducimos los datos a modificar
-			System.out.println("Introduzca la nueva fecha de la cita: ");
-			String fechaAModificar = teclado.nextLine();
-			LocalDate fecha = LocalDate.parse(fechaAModificar, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+			try {
+				// Si existe, introducimos los datos a modificar
+				System.out.println("Introduzca la nueva fecha de la cita: ");
+				String fechaAModificar = teclado.nextLine();
+				LocalDate fecha = LocalDate.parse(fechaAModificar, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-			// Actualizo los valores
-			citaABuscar.setFecha(fecha);
-			// Actualizo la cita
-			daoCita.actualizarCita(citaABuscar);
-			System.out.println("Cita actualizada correctamente.");
+				// Actualizo los valores
+				citaABuscar.setFecha(fecha);
+
+				// Actualizo la cita
+				daoCita.actualizarCita(citaABuscar);
+
+				System.out.println("Cita actualizada correctamente.");
+			} catch (DateTimeParseException e) {
+				System.out.println("La fecha introducida no es correcta, debe contener el formato(dd-MM-yyyy)");
+			}
 		}
+	}
+
+	/*
+	 * Metodo para comprobar que el dni tenga una longitud de 9
+	 */
+	public static boolean validarDni(String dni) {
+		return dni.matches("^[0-9]{7,8}[A-Z]$");
 	}
 }
